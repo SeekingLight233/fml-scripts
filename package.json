@@ -1,0 +1,19 @@
+{
+  "name": "fml-scripts",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "build": "rollup -c"
+  },
+  "author": "Jason Lee",
+  "license": "ISC",
+  "devDependencies": {
+    "rimraf": "^5.0.7",
+    "rollup": "^4.18.0",
+    "rollup-plugin-typescript2": "^0.36.0"
+  }
+}
