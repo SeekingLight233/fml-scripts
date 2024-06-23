@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (mutation.type === 'childList') {
         updateSelectElement();
         fixNumber();
-        changeDomText("Get Tickets Facebook", "Purchase Tickets");
+        if (location.href.includes("/events/")) changeDomText("Get Tickets Facebook", "Purchase Tickets");
+        setupChangeDate()
       }
     }
   });
@@ -18,11 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (targetNode) {
     observer.observe(targetNode, config);
   } else {
-    console.error('Target node not found');
+    // console.error('Target node not found');
   }
 });
 
 function updateSelectElement() {
+  if (!location.href.includes("listing-author/?dashboard=events")) return
   const selectElement = document.querySelector('#lp-events-form > div:nth-child(6) > div > div.row > div.col-md-4 > select') as HTMLSelectElement;
 
   if (selectElement) {
@@ -45,11 +47,12 @@ function updateSelectElement() {
       }
     }
   } else {
-    console.error('The select element with the specified class names was not found.');
+    // console.error('The select element with the specified class names was not found.');
   }
 }
 
 function fixNumber() {
+  if (!location.href.includes("listing-author/?dashboard=listings")) return
   const firstSpan = document.querySelector("#select-plan-form > div:nth-child(1) > div.per_user_per_listing_price.per_user_per_listing_price-hv2 > span");
   const firstNum = firstSpan?.textContent;
   // $100.004
@@ -72,4 +75,32 @@ function changeDomText(oriStr: string, newStr: string) {
   elems.forEach(e => {
     if (e?.textContent) e.textContent = newStr;
   })
+}
+function setupChangeDate() {
+  if (location.href.includes("dashboard=events")) {
+    const startInput = document.querySelector("#event-date-s");
+    const endInput = document.querySelector("#event-date-e");
+
+    // 为开始日期添加监听事件
+    startInput?.addEventListener("change", (e) => {
+      console.log("change");
+      
+      formatAndSetDate(e.target);
+    });
+
+    // 为结束日期添加监听事件
+    endInput?.addEventListener('change', (e) => {
+      formatAndSetDate(e.target);
+    });
+  }
+}
+
+// 用于格式化并设置日期的辅助函数
+function formatAndSetDate(inputElement) {
+  if (inputElement.value) {
+    const [month, day, year] = inputElement.value.split('/');
+    if (day && month && year) { // 确保日期分割后三部分都存在
+      inputElement.value = `${day}/${month}/${year}`;
+    }
+  }
 }
